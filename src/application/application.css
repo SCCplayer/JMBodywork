@@ -1,1 +1,87 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root{
+	-fx-base: #222;
+  	-fx-background-color: black;
+  	-fx-background-color: radial-gradient(center 50% 50%, radius 60%, #111, #000);
+  	-fx-background-image: url("../resources/cross.png");
+}
+
+.lblCenter{
+	-fx-font-family: FontAwesome;
+	-fx-font-size: 100;
+}
+
+.standardButton{
+	-fx-font-family: FontAwesome;
+	-fx-font-size: 20;
+	-fx-alignment: center-right ;
+}
+
+.standardLabel{
+	-fx-font-family: FontAwesome;
+	-fx-font-size: 20;
+	-fx-padding: 20 20 20 20;
+}
+
+.standardTextbox{
+	-fx-font-family: FontAwesome;
+	-fx-font-size: 20;
+	-fx-max-width: 45;
+	-fx-padding: 10 10 10 10;
+}
+
+.bpLabel{
+	-fx-background-color: white;
+	-fx-border-width: 2;
+	-fx-border-style: solid;
+	-fx-border-color: black; 
+}
+
+.barFooter{
+	-fx-border-width: 3;
+	-fx-border-style: solid; 
+	-fx-border-insets: 5 20 5 20;
+	-fx-border-color: white;
+}
+
+.dragBP{
+	-fx-border-width: 3;
+	-fx-border-style: solid; 
+	-fx-border-insets: 5 20 5 20;
+	-fx-border-color: white;
+	-fx-alignment: center;
+}
+
+.lblHeader{
+	-fx-font-family: FontAwesome;
+	-fx-font-size: 30;
+	-fx-padding: 20 0 20 20;
+}
+
+.menuBar{
+	-fx-font-family: FontAwesome;
+	-fx-font-size: 30;
+	-fx-padding: 20 20 20 20;
+}
+
+.menuBar:hover{
+	-fx-background-color: darkkhaki ;
+}
+
+.bpZeitanzeige{
+	-fx-base: #222;
+  	-fx-background-color: black;
+  	-fx-background-color: radial-gradient(center 50% 50%, radius 60%, #111, #000);
+  	-fx-background-image: url("../resources/cross.png");
+}
+
+.labelZeitanzeige{
+	-fx-font-family: FontAwesome;
+	-fx-font-size: 550;
+}
+
+.lblTop{
+	-fx-font-family: Arial;
+	-fx-font-size: 80;
+}
