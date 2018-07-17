@@ -15,7 +15,8 @@
 .standardButton{
 	-fx-font-family: FontAwesome;
 	-fx-font-size: 20;
-	-fx-alignment: center-right ;
+
+
 }
 
 .standardLabel{
