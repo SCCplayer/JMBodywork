@@ -1,9 +1,6 @@
 package gui;
 
-import java.io.File;
-
 import application.ControllerMain;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -14,7 +11,7 @@ public class StageTimeView extends Stage {
 		BorderPane root = new BorderPane();
 		root.setTop(new NodeMenuBar(this));
 		root.setCenter(ntv);
-		Scene scene = new Scene(root, 800, 800);
+		Scene scene = new Scene(root, 1000, 800);
 		scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 		this.setOnCloseRequest(e -> {
 			cm.stopAll();

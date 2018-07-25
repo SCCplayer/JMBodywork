@@ -42,7 +42,10 @@ public class NodeFooterBar extends BorderPane {
 
 		tfZeitAktiv.textProperty().bindBidirectional(cm.getIntProbAktivStartwert(), new NumberStringConverter());
 		tfZeitPause.textProperty().bindBidirectional(cm.getIntProbPauseStartwert(), new NumberStringConverter());
+		tfStartDelay.textProperty().bindBidirectional(cm.getIntProbStartDelay(), new NumberStringConverter());
 		tfAnzahlStationen.textProperty().bindBidirectional(cm.getIntProbAnzahlStation(), new NumberStringConverter());
+		tfAnzahlRunden.textProperty().bindBidirectional(cm.getIntProbAnzahlRunden(), new NumberStringConverter());
+		tfRundenPause.textProperty().bindBidirectional(cm.getIntProbRundenPause(), new NumberStringConverter());
 
 		// TODO Auto-generated constructor stub
 		gp.add(lblStartDelay, 0, 0);

@@ -14,13 +14,17 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 public class ControllerMain {
-	private final SimpleIntegerProperty startwertDelay = new SimpleIntegerProperty(5);
-	private final SimpleIntegerProperty startwertAktiv = new SimpleIntegerProperty(10);
-	private final SimpleIntegerProperty startwertPause = new SimpleIntegerProperty(10);
+	private final SimpleIntegerProperty startwertDelay = new SimpleIntegerProperty(10);
+	private final SimpleIntegerProperty startwertAktiv = new SimpleIntegerProperty(25);
+	private final SimpleIntegerProperty startwertPause = new SimpleIntegerProperty(20);
 	private final SimpleIntegerProperty anzahlStation = new SimpleIntegerProperty(14);
-	private final SimpleIntegerProperty anzahlRunden = new SimpleIntegerProperty(14);
+	private final SimpleIntegerProperty anzahlRunden = new SimpleIntegerProperty(3);
 	private final SimpleIntegerProperty rundenPause = new SimpleIntegerProperty(5);
 	private int counterTime = 0;
+	private int counterRunde = 0;
+	private int counterStation = 0;
+
+	private String minAnzeige = "";
 
 	private Random random = new Random();
 
@@ -54,23 +58,30 @@ public class ControllerMain {
 		nodeZeitAnzeige = new NodeTimeView(this);
 		stv = new StageTimeView(nodeZeitAnzeige, this);
 		counterTime = startwertDelay.intValue();
+		nodeZeitAnzeige.getLblZeitanzeige().setText(String.valueOf(counterTime));
 		Timeline timerStartDelay = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
 			counterTime = counterTime - 1;
 			nodeZeitAnzeige.getLblZeitanzeige().setText(String.valueOf(counterTime));
-			if (counterTime == -1) {
+
+			if (counterTime == 5) {
+				playerStartSignal.play();
+			} else if (counterTime == -1) {
 				counterTime = startwertAktiv.intValue();
+				counterRunde = 1;
+				counterStation = 0;
 				startAktiv();
 			}
 
 		}));
 		timerStartDelay.setCycleCount(startwertDelay.intValue() + 1);
-		playerStartSignal.play();
-		// timelineActiv = timerStartDelay;
+		timelineActiv = timerStartDelay;
 		timerStartDelay.play();
 
 	}
 
 	private void startAktiv() {
+		counterStation = counterStation + 1;
+		nodeZeitAnzeige.getLblStationAktuell().setText(String.valueOf(counterStation));
 		playAktivSong();
 		nodeZeitAnzeige.getLblZeitanzeige().setText(String.valueOf(counterTime));
 		nodeZeitAnzeige.getLblTop().setText("Aktive Phase");
@@ -88,6 +99,10 @@ public class ControllerMain {
 				playerVolumeFadeOut(playerActive);
 			} else if (counterTime == 0) {
 				playerWechselSignal.play();
+			} else if (counterTime == -1 && counterStation == anzahlStation.intValue()) {
+				counterTime = rundenPause.intValue() * 60;
+				playerActive.stop();
+				startErholung();
 			} else if (counterTime == -1) {
 				counterTime = startwertPause.intValue();
 				playerActive.stop();
@@ -113,6 +128,33 @@ public class ControllerMain {
 			} else if (counterTime == -1) {
 				counterTime = startwertAktiv.intValue();
 				playerPause.stop();
+				startAktiv();
+			}
+		}));
+		timerPause.setCycleCount(counterTime + 1);
+		timelineActiv = timerPause;
+		timerPause.play();
+	}
+
+	private void startErholung() {
+		playerStartSignal.stop();
+		nodeZeitAnzeige.getLblTop().setText("Erholungsphase");
+		// playPauseSong();
+		minAnzeige = String.valueOf(rundenPause.intValue()) + ":00";
+		nodeZeitAnzeige.getLblZeitanzeige().setText(minAnzeige);
+		Timeline timerPause = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
+			counterTime = counterTime - 1;
+
+			minAnzeige = String.valueOf(counterTime / 60) + ":" + String.format("%02d", counterTime % 60);
+			nodeZeitAnzeige.getLblZeitanzeige().setText(String.valueOf(minAnzeige));
+			if (counterTime == 5) {
+				playerStartSignal.play();
+			} else if (counterTime == -1) {
+				counterTime = startwertAktiv.intValue();
+				// playerPause.stop();
+				counterStation = 0;
+				counterRunde = counterRunde + 1;
+				nodeZeitAnzeige.getLblRundeAktuell().setText(String.valueOf(counterRunde));
 				startAktiv();
 			}
 		}));
@@ -182,17 +224,37 @@ public class ControllerMain {
 		return anzahlStation;
 	}
 
+	public SimpleIntegerProperty getIntProbStartDelay() {
+		return startwertDelay;
+	}
+
+	public SimpleIntegerProperty getIntProbRundenPause() {
+		return rundenPause;
+	}
+
+	public SimpleIntegerProperty getIntProbAnzahlRunden() {
+		return anzahlRunden;
+	}
+
 	public File getNextSong() {
 		return listMusicAktiv.get(1);
 	}
 
 	public void stopAll() {
 		System.out.println("Player Stoppen");
-		playerActive.stop();
-		playerPause.stop();
+		System.out.println(playerActive);
+		if (playerActive != null) {
+			playerActive.stop();
+		}
+		if (playerPause != null) {
+			playerPause.stop();
+		}
 		playerWechselSignal.stop();
 		playerStartSignal.stop();
 		playerStopSignal.stop();
-		timelineActiv.stop();
+		if (timelineActiv != null) {
+			timelineActiv.stop();
+		}
+
 	}
 }
