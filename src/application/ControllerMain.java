@@ -140,27 +140,32 @@ public class ControllerMain {
 		playerStartSignal.stop();
 		nodeZeitAnzeige.getLblTop().setText("Erholungsphase");
 		// playPauseSong();
-		minAnzeige = String.valueOf(rundenPause.intValue()) + ":00";
-		nodeZeitAnzeige.getLblZeitanzeige().setText(minAnzeige);
-		Timeline timerPause = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
-			counterTime = counterTime - 1;
+		if (anzahlRunden.intValue() == counterRunde) {
+			nodeZeitAnzeige.getLblZeitanzeige().setText("Ende");
+		} else {
+			minAnzeige = String.valueOf(rundenPause.intValue()) + ":00";
+			nodeZeitAnzeige.getLblZeitanzeige().setText(minAnzeige);
+			Timeline timerPause = new Timeline(new KeyFrame(Duration.millis(1000), ae -> {
+				counterTime = counterTime - 1;
 
-			minAnzeige = String.valueOf(counterTime / 60) + ":" + String.format("%02d", counterTime % 60);
-			nodeZeitAnzeige.getLblZeitanzeige().setText(String.valueOf(minAnzeige));
-			if (counterTime == 5) {
-				playerStartSignal.play();
-			} else if (counterTime == -1) {
-				counterTime = startwertAktiv.intValue();
-				// playerPause.stop();
-				counterStation = 0;
-				counterRunde = counterRunde + 1;
-				nodeZeitAnzeige.getLblRundeAktuell().setText(String.valueOf(counterRunde));
-				startAktiv();
-			}
-		}));
-		timerPause.setCycleCount(counterTime + 1);
-		timelineActiv = timerPause;
-		timerPause.play();
+				minAnzeige = String.valueOf(counterTime / 60) + ":" + String.format("%02d", counterTime % 60);
+				nodeZeitAnzeige.getLblZeitanzeige().setText(String.valueOf(minAnzeige));
+				if (counterTime == 5) {
+					playerStartSignal.play();
+				} else if (counterTime == -1) {
+					counterTime = startwertAktiv.intValue();
+					// playerPause.stop();
+					counterStation = 0;
+					counterRunde = counterRunde + 1;
+					nodeZeitAnzeige.getLblRundeAktuell().setText(String.valueOf(counterRunde));
+					startAktiv();
+				}
+			}));
+			timerPause.setCycleCount(counterTime + 1);
+			timelineActiv = timerPause;
+			timerPause.play();
+		}
+
 	}
 
 	private void playAktivSong() {
